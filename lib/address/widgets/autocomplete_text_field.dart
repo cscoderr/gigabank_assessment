@@ -11,9 +11,13 @@ class AutocompleteTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      cursorColor: Colors.black,
       decoration: InputDecoration(
         hintText: hintText,
-        prefixIcon: const Icon(Icons.search),
+        suffixIcon: const Icon(Icons.search),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF99E1B1)),
+        ),
       ),
     );
   }

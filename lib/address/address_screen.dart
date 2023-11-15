@@ -18,7 +18,14 @@ class _AddressScreenState extends State<AddressScreen> {
           LinearProgressIndicator(
             value: 0.5,
           ),
-          _AddressForm(),
+          Expanded(
+            child: _AddressForm(),
+          ),
+          SolidButton(
+            text: 'Next',
+            onPressed: null,
+          ),
+          SizedBox(height: 30),
         ],
       ),
     );
@@ -36,6 +43,31 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 }
 
+class SolidButton extends StatelessWidget {
+  const SolidButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+  });
+
+  final String text;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        fixedSize: Size(MediaQuery.sizeOf(context).width - 40, 60),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+      ),
+      child: Text(text),
+    );
+  }
+}
+
 class _AddressForm extends StatelessWidget {
   const _AddressForm();
 
@@ -43,7 +75,7 @@ class _AddressForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.symmetric(
-        vertical: 20,
+        vertical: 30,
         horizontal: 20,
       ),
       child: Column(
@@ -52,18 +84,23 @@ class _AddressForm extends StatelessWidget {
           Text(
             'Please enter information as written \non your ID document.',
           ),
+          SizedBox(height: 30),
           AutocompleteTextField(
             hintText: 'Country',
           ),
+          SizedBox(height: 20),
           AppTextField(
             hintText: 'Prefecture',
           ),
+          SizedBox(height: 20),
           AppTextField(
-            hintText: 'Manucipality',
+            hintText: 'Municipality',
           ),
+          SizedBox(height: 20),
           AppTextField(
-            hintText: 'Street address (subarea-block-house)',
+            hintText: 'Street address (subarea-block-house address)',
           ),
+          SizedBox(height: 20),
           AppTextField(
             hintText: 'Apartment, suite or unit',
           ),
