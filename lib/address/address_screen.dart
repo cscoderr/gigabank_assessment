@@ -89,27 +89,22 @@ class _AddressFormState extends State<_AddressForm> {
 
   void _addListener() {
     _country.addListener(() {
-      if (_country.text.isEmpty) return;
       setState(() {});
     });
 
     _prefecture.addListener(() {
-      if (_prefecture.text.isEmpty) return;
       setState(() {});
     });
 
     _municipality.addListener(() {
-      if (_municipality.text.isEmpty) return;
       setState(() {});
     });
 
     _streetAddress.addListener(() {
-      if (_streetAddress.text.isEmpty) return;
       setState(() {});
     });
 
     _apartment.addListener(() {
-      if (_apartment.text.isEmpty) return;
       setState(() {});
     });
   }
