@@ -18,7 +18,7 @@ class _AddressScreenState extends State<AddressScreen> {
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         appBar: _buildAppBar(),
         body: const Column(
           children: [
@@ -169,7 +169,7 @@ class _AddressFormState extends State<_AddressForm> {
                       if (value?.isEmpty ?? true) {
                         return 'Street address is required';
                       }
-
+                      //TODO: write more validation to validate the exact format `subarea-block-house`
                       if (!value!.contains('-')) {
                         return "Street address must be in 'subarea-block-house' format";
                       }
