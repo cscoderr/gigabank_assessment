@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTextField extends StatelessWidget {
   const AppTextField({
@@ -9,6 +10,7 @@ class AppTextField extends StatelessWidget {
     this.onChange,
     this.suffixIcon,
     this.focusNode,
+    this.inputFormatters,
   });
 
   final String? hintText;
@@ -17,6 +19,7 @@ class AppTextField extends StatelessWidget {
   final ValueChanged<String>? onChange;
   final Widget? suffixIcon;
   final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +28,7 @@ class AppTextField extends StatelessWidget {
       validator: validator,
       onChanged: onChange,
       focusNode: focusNode,
+      inputFormatters: inputFormatters,
       cursorColor: Colors.black,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
