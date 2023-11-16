@@ -11,22 +11,25 @@ class AddressScreen extends StatefulWidget {
 class _AddressScreenState extends State<AddressScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: const Column(
-        children: [
-          LinearProgressIndicator(
-            value: 0.5,
-          ),
-          Expanded(
-            child: _AddressForm(),
-          ),
-          SolidButton(
-            text: 'Next',
-            onPressed: null,
-          ),
-          SizedBox(height: 30),
-        ],
+    return GestureDetector(
+      onTap: () {
+        if (FocusManager.instance.primaryFocus != null) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: _buildAppBar(),
+        body: const Column(
+          children: [
+            LinearProgressIndicator(
+              value: 0.5,
+            ),
+            Expanded(
+              child: _AddressForm(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -35,46 +38,81 @@ class _AddressScreenState extends State<AddressScreen> {
     return AppBar(
       title: const Text('Registered Address'),
       centerTitle: true,
-      leading: const Icon(
-        Icons.arrow_back_ios,
-        size: 15,
-      ),
-    );
-  }
-}
-
-class SolidButton extends StatelessWidget {
-  const SolidButton({
-    super.key,
-    required this.text,
-    required this.onPressed,
-  });
-
-  final String text;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        fixedSize: Size(MediaQuery.sizeOf(context).width - 40, 60),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
+      leading: IconButton(
+        onPressed: () => Navigator.of(context).pop(),
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          size: 15,
         ),
       ),
-      child: Text(text),
     );
   }
 }
 
-class _AddressForm extends StatelessWidget {
+class _AddressForm extends StatefulWidget {
   const _AddressForm();
 
   @override
+  State<_AddressForm> createState() => _AddressFormState();
+}
+
+class _AddressFormState extends State<_AddressForm> {
+  late TextEditingController _country;
+  late TextEditingController _prefecture;
+  late TextEditingController _municipality;
+  late TextEditingController _streetAddress;
+  late TextEditingController _apartment;
+  final _formKey = GlobalKey<FormState>();
+  Address? _registeredAddress;
+
+  @override
+  void initState() {
+    super.initState();
+    _country = TextEditingController();
+    _prefecture = TextEditingController();
+    _municipality = TextEditingController();
+    _streetAddress = TextEditingController();
+    _apartment = TextEditingController();
+
+    _addListener();
+  }
+
+  @override
+  void dispose() {
+    _country.dispose();
+    _prefecture.dispose();
+    _municipality.dispose();
+    _streetAddress.dispose();
+    _apartment.dispose();
+    super.dispose();
+  }
+
+  void _addListener() {
+    _country.addListener(() {
+      setState(() {});
+    });
+
+    _prefecture.addListener(() {
+      setState(() {});
+    });
+
+    _municipality.addListener(() {
+      setState(() {});
+    });
+
+    _streetAddress.addListener(() {
+      setState(() {});
+    });
+
+    _apartment.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(
+    return Padding(
+      padding: const EdgeInsets.symmetric(
         vertical: 30,
         horizontal: 20,
       ),
@@ -83,26 +121,96 @@ class _AddressForm extends StatelessWidget {
         children: [
           Text(
             'Please enter information as written \non your ID document.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
           ),
-          SizedBox(height: 30),
-          AutocompleteTextField(
-            hintText: 'Country',
+          const SizedBox(height: 30),
+          Expanded(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CountryDropdown(
+                    controller: _country,
+                  ),
+                  const SizedBox(height: 20),
+                  AppTextField(
+                    controller: _prefecture,
+                    hintText: 'Prefecture',
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Prefecture is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  AppTextField(
+                    controller: _municipality,
+                    hintText: 'Municipality',
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Municipality is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  AppTextField(
+                    controller: _streetAddress,
+                    hintText: 'Street address (subarea-block-house address)',
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Street address is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  AppTextField(
+                    controller: _apartment,
+                    hintText: 'Apartment, suite or unit',
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Apartment is required';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
-          SizedBox(height: 20),
-          AppTextField(
-            hintText: 'Prefecture',
-          ),
-          SizedBox(height: 20),
-          AppTextField(
-            hintText: 'Municipality',
-          ),
-          SizedBox(height: 20),
-          AppTextField(
-            hintText: 'Street address (subarea-block-house address)',
-          ),
-          SizedBox(height: 20),
-          AppTextField(
-            hintText: 'Apartment, suite or unit',
+          SolidButton(
+            text: 'Next',
+            onPressed: (_formKey.currentState?.validate() == true)
+                ? () {
+                    _registeredAddress = Address(
+                      country: _country.text,
+                      prefecture: _prefecture.text,
+                      municipality: _municipality.text,
+                      streetAddress: _streetAddress.text,
+                      apartment: _apartment.text,
+                    );
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog.adaptive(
+                          title: const Text('Success'),
+                          content: const Text('Address saved successfully'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('Close'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                : null,
           ),
         ],
       ),
