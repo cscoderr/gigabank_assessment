@@ -87,6 +87,7 @@ class _AddressFormState extends State<_AddressForm> {
     super.dispose();
   }
 
+  //TODO: Remove the listeners and handle it better
   void _addListener() {
     _country.addListener(() {
       setState(() {});
@@ -167,6 +168,10 @@ class _AddressFormState extends State<_AddressForm> {
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'Street address is required';
+                      }
+
+                      if (!value!.contains('-')) {
+                        return "Street address must be in 'subarea-block-house' format";
                       }
                       return null;
                     },

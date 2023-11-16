@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 
+//TODO: Handles the formatter based on different edge cases
 class StreetAddressFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
